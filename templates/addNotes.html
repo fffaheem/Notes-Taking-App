@@ -1,0 +1,79 @@
+{% extends "linkAndHead.html" %}
+
+
+{% block body %}
+
+
+<h2 class="text-center my-4" id="heading">Add Notes</h2>
+
+
+<div class="container my-4">
+    <form id="form">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+        </div>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+        </div>
+        <div class="mb-3">
+            <label for="desc" class="form-label">Description</label>
+            <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary my-4" id="submitBtn">Submit</button>
+    </form>
+</div>
+
+<script>
+    let form = document.getElementById("form")
+    let email = document.getElementById("email")
+    let title = document.getElementById("title")
+    let desc = document.getElementById("desc")
+    form.addEventListener("submit",(e)=>{
+        e.preventDefault()
+        let formData = new FormData(form);
+
+        let url = "/addNote";
+        let xhr = new XMLHttpRequest();
+        let mssg = document.createElement("div");
+        mssg.setAttribute("role","alert");
+        xhr.open("POST",url,true);
+
+        xhr.onload=()=>{
+            let data = xhr.responseText;
+            data = JSON.parse(data)
+            if(data.message = "success"){
+                email.value = ""
+                title.value = ""
+                desc.value = ""
+                mssg.setAttribute("class","alert alert-success alert-dismissible fade show");
+                mssg.innerHTML = 
+                `
+                    <strong>Your Notes was added successfully </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `
+
+            }else{
+                mssg.innerHTML = 
+                `
+                    <strong>Something went wrong</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `
+            }
+            let heading = document.getElementById("heading")
+            heading.insertAdjacentElement('beforebegin', mssg);
+
+        }
+
+        xhr.send(formData);
+    })
+
+</script>
+
+{% endblock body %}
+
+
+
+

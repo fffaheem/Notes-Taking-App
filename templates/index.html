@@ -1,0 +1,25 @@
+{% extends "linkAndHead.html" %}
+
+
+{% block body %}
+
+<h2 class="text-center my-4">All Notes</h2>
+
+<div class="container my-4">
+    {% if all_notes|length < 1 %}
+        <h2> no notes </h2>
+    {% else %}
+        {% for notes in all_notes %}
+        <div class="card my-2" >
+            <div class="card-body">
+                <h5 class="card-title">{{notes.title}}</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">{{notes.email}}</h6>
+                <h6 class="card-subtitle mb-2 text-body-secondary">{{notes.date}}</h6>
+                <p class="card-text">{{notes.desc}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock body %}
